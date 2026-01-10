@@ -26,4 +26,4 @@ def dashboard_view(request):
         'permissions': permissions,
         'roles': [ur.role.role_name for ur in user_roles],
     }
-    return render(request, 'templates/core/dashboard.html', context)
+    return render(request, 'core/dashboard.html', context)

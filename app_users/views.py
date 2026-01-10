@@ -1,4 +1,4 @@
-from pyexpat.errors import messages
+from django.contrib import messages
 from django.shortcuts import redirect, render
 from .forms import LoginForm
 from django.contrib.auth import login, authenticate, logout
@@ -19,10 +19,10 @@ def login_view(request):
                 login(request, user)
                 return redirect('dashboard')
             else:
-                form.add_error(None, 'Invalid username or password')
+                messages.error(request, 'Invalid username or password')
     else:
         form = LoginForm()
-    return render(request, 'app_users/login.html', {'form': form})
+    return render(request, 'users/login.html', {'form': form})
 
 @login_required
 def logout_view(request):
