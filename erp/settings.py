@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app_users',
+    'app_core',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +61,7 @@ ROOT_URLCONF = 'erp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIR := BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -99,6 +101,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Custom user model
+AUTH_USER_MODEL = 'app_users.CustomUser'
+LOGIN_REDIRECT_URL = '/user/dashboard/'
+LOGOUT_REDIRECT_URL = '/users/login/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
