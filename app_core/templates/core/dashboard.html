@@ -1,97 +1,96 @@
-<htm>ERP JM</ht=l>
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
 {% block content %}
-<nav>
-    <a href="#">ERP</a> |
-    <span>welcome, {{ user.first_name|default:user.username }}</span> |
-    <a href="{% url 'logout' %}">Logout</a>
-</nav>
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b-2 border-gray-400 pb-2">Dashboard</h2>
 
-<h2>Dashboard</h2>
-<p>Assigned roles: <strong> {{ roles|join:", " }}</strong></p>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    {% if permissions.customers > 0 %}
-    <div style="border: 1px solid #000; padding: 10px; width: 200px;">
-        <h3> Customers</h3>
-        <p>{% if permissions.customers == 1 %} "View only" {% else %}Read and write{% endif %}</p>
-        <a href="#">Access</a>
+        {% if permissions.materials > 0 %}
+        <a href="#" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex flex-col items-center text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gem text-teal-500 mb-4"><path d="M6 3h12l3 3-9 15-9-15 3-3Z"/><path d="M6 3h12l3 3-9 15-9-15 3-3Z"/><path d="M6 3 3 6l9 15 9-15-3-3Z"/><path d="M12 3 3 6l9 15-9-15z"/><path d="M12 3 3 6l9 15-9-15z"/></svg>
+                <h3 class="text-xl font-semibold text-gray-800">Materials</h3>
+                <p class="text-gray-500 text-sm mt-1">{%if permissions.materials == 1 %}View only{% else %}Read and write{% endif %}</p>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if permissions.customers > 0 %}
+        <a href="#" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex flex-col items-center text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users text-blue-500 mb-4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></svg>
+                <h3 class="text-xl font-semibold text-gray-800">Customers</h3>
+                <p class="text-gray-500 text-sm mt-1">{%if permissions.customers == 1 %}View only{% else %}Read and write{% endif %}</p>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if permissions.suppliers > 0 %}
+        <a href="#" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex flex-col items-center text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck text-green-500 mb-4">"><path d="M5 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0"/><path d="M12 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0"/><path d="M18 17H9a3 3 0 0 1-3-3V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-1.5a2.5 2.5 0 0 0 0 5H18"/><path d="M22 14v1"/></svg>
+                <h3 class="text-xl font-semibold text-gray-800">Suppliers</h3>
+                <p class="text-gray-500 text-sm mt-1">{%if permissions.suppliers == 1 %}View only{% else %}Read and write{% endif %}</p>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if permissions.purchases > 0 %}
+        <a href="#" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex flex-col items-center text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart text-yellow-500 mb-4"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <h3 class="text-xl font-semibold text-gray-800">Purchases</h3>
+                <p class="text-gray-500 text-sm mt-1">{%if permissions.purchases == 1 %}View only{% else %}Read and write{% endif %}</p>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if permissions.sales > 0 %}
+        <a href="#" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex flex-col items-center text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up text-orange-500 mb-4"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                <h3 class="text-xl font-semibold text-gray-800">Sales</h3>
+                <p class="text-gray-500 text-sm mt-1">{%if permissions.sales == 1 %}View only{% else %}Read and write{% endif %}</p>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if permissions.inventory > 0 %}
+        <a href="#" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex flex-col items-center text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-2 text-purple-500 mb-4"><path d="M3 9.5a2 2 0 0 1-1.28-1.74a1.94 1.94 0 0 1 .53-1.89l7.85-6.84a2.1 2.1 0 0 1 2.75 0l7.85 6.84a1.94 1.94 0 0 1 .53 1.89A2 2 0 0 1 21 9.5a2 2 0 0 1-1 1.73v5.82a2 2 0 0 1-1 1.73l-6.85 4.6a1.9 1.9 0 0 1-2.29 0l-6.85-4.6a2 2 0 0 1-1-1.73V11.23A2 2 0 0 1 3 9.5Z"/><path d="m16 9-4-3-4 3"/><path d="M12 2v6"/><path d="M12 11v11"/></svg>
+                <h3 class="text-xl font-semibold text-gray-800">Inventory</h3>
+                <p class="text-gray-500 text-sm mt-1">{%if permissions.inventory == 1 %}View only{% else %}Read and write{% endif %}</p>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if permissions.accounting > 0 %}
+        <a href="#" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex flex-col items-center text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-receipt text-cyan-500 mb-4"><path d="M4 2v20a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h8"/><path d="M8 20h8"/><path d="M8 4h8"/><path d="M8 0h8"/></svg>
+                <h3 class="text-xl font-semibold text-gray-800">Accounting</h3>
+                <p class="text-gray-500 text-sm mt-1">{%if permissions.accounting == 1 %}View only{% else %}Read and write{% endif %}</p>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if permissions.reporting > 0 %}
+        <a href="#" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div class="flex flex-col items-center text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bar-chart text-red-500 mb-4"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                <h3 class="text-xl font-semibold text-gray-800">Reporting</h3>
+                <p class="text-gray-500 text-sm mt-1">{%if permissions.reporting == 1 %}View only{% else %}Read and write{% endif %}</p>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if permissions.materials == 0 and permissions.customers == 0 and permissions.suppliers == 0 and permissions.purchases == 0 and permissions.sales == 0 and permissions.inventory == 0 and permissions.accounting == 0 and permissions.reporting == 0 %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mt-8">
+                <h4 class="font-bold">You don't have permissions assigned</h4>
+            </div>
+        {% endif %}
     </div>
-    {% endif %}
-</div>
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    {% if permissions.suppliers > 0 %}
-    <div style="border: 1px solid #000; padding: 10px; width: 200px;">
-        <h3> Suppliers</h3>
-        <p>{% if permissions.suppliers == 1 %} "View only" {% else %}Read and write{% endif %}</p>
-        <a href="#">Access</a>
-    </div>
-    {% endif %}
-</div>
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    {% if permissions.materials > 0 %}
-    <div style="border: 1px solid #000; padding: 10px; width: 200px;">
-        <h3> Materials</h3>
-        <p>{% if permissions.materials == 1 %} "View only" {% else %}Read and write{% endif %}</p>
-        <a href="#">Access</a>
-    </div>
-    {% endif %}
-</div>
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    {% if permissions.purchase > 0 %}
-    <div style="border: 1px solid #000; padding: 10px; width: 200px;">
-        <h3> Purchase</h3>
-        <p>{% if permissions.purchase == 1 %} "View only" {% else %}Read and write{% endif %}</p>
-        <a href="#">Access</a>
-    </div>
-    {% endif %}
-</div>
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    {% if permissions.sales > 0 %}
-    <div style="border: 1px solid #000; padding: 10px; width: 200px;">
-        <h3> Sales</h3>
-        <p>{% if permissions.sales == 1 %} "View only" {% else %}Read and write{% endif %}</p>
-        <a href="#">Access</a>
-    </div>
-    {% endif %}
-</div>
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    {% if permissions.inventory > 0 %}
-    <div style="border: 1px solid #000; padding: 10px; width: 200px;">
-        <h3> Inventory</h3>
-        <p>{% if permissions.inventory == 1 %} "View only" {% else %}Read and write{% endif %}</p>
-        <a href="#">Access</a>
-    </div>
-    {% endif %}
-</div>
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    {% if permissions.accounting > 0 %}
-    <div style="border: 1px solid #000; padding: 10px; width: 200px;">
-        <h3> Accounting</h3>
-        <p>{% if permissions.accounting == 1 %} "View only" {% else %}Read and write{% endif %}</p>
-        <a href="#">Access</a>
-    </div>
-    {% endif %}
-</div>
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    {% if permissions.reporting > 0 %}
-    <div style="border: 1px solid #000; padding: 10px; width: 200px;">
-        <h3> Reporting</h3>
-        <p>{% if permissions.reporting == 1 %} "View only" {% else %}Read and write{% endif %}</p>
-        <a href="#">Access</a>
-    </div>
-    {% endif %}
-</div>
-
-{% if permissions.customers == 0 and permissions.suppliers == 0 and permissions.materials == 0 and permissions.purchase == 0 and permissions.sales == 0 and permissions.inventory == 0 and permissions.accounting == 0 and permissions.reporting == 0 %}
-<div style="border : 1px solid red; padding: 10px; margin-top: 20px;">
-    <h4><strong>Warning:</strong> You have no permissions assigned.</h4>
-    <p>Please contact the system administrator to assign you the appropriate roles and permissions.</p> 
-{% endif %}
 {% endblock %}
