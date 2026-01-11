@@ -25,11 +25,11 @@
                     {% endblock %}
                 </div>
                 <div class="relative">
-                    <button id="notifications-button" class="relative focus:outline-none">
+                    <button id="user-menu-button" class="flex items-center space-x-2 text-lg font-medium transition-all hover:bg-white/10 p-2 rounded-lg">
                         <span>{{ user.first_name | default:user.username }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
-                    <div id="user-menu-dropdown" class="user-dropdown-menu absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg py-1 hidden z-50">
+                    <div id="user-menu-dropdown" class="user-menu-dropdown absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg py-1 hidden z-50">
                         <a href="#perfil " class="flex items-center px-4 py-2 hover:bg-gray-200">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-user-icon lucide-circle-user"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
                             <span class="ml-2">Profile</span>
@@ -61,7 +61,7 @@
         {% endblock %}
     </main>
     <footer>
-        <p>&copy; 2024 ERP System</p>
+        <p>&copy; 2026 ERP System</p>
     </footer>
     {% block extra_scripts %}{% endblock %}
     <script src="{% static 'js/script.js' %}"></script>
