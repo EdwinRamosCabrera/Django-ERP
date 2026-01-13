@@ -8,7 +8,7 @@
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
 
         {% if permissions.materials > 0 %}
-        <a href="#" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+        <a href="{% url 'materials:material_list' %}" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
             <div class="flex flex-col items-center text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gem text-teal-500 mb-4"><path d="M6 3h12l3 3-9 15-9-15 3-3Z"/><path d="M6 3h12l3 3-9 15-9-15 3-3Z"/><path d="M6 3 3 6l9 15 9-15-3-3Z"/><path d="M12 3 3 6l9 15-9-15z"/><path d="M12 3 3 6l9 15-9-15z"/></svg>
                 <h3 class="text-xl font-semibold text-gray-800">Materials</h3>

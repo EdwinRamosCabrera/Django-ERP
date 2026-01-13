@@ -11,8 +11,8 @@ class Material(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated at")
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Created by") # Usuario que este logueado y que creó el registro, se usa SET_NULL para no eliminar el material si el usuario es eliminado, y se completará automaticamente al crear el registro
-    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Updated by") # Usuario que este logueado y que actualizó el registro
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Created by", related_name="materials_created") # Usuario que este logueado y que creó el registro, se usa SET_NULL para no eliminar el material si el usuario es eliminado, y se completará automaticamente al crear el registro
+    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Updated by", related_name="materials_updated") # Usuario que este logueado y que actualizó el registro
     class Meta:
         db_table = 'materials'
         verbose_name = 'Material'

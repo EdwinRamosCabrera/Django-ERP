@@ -16,6 +16,7 @@ def materials_list(request):
    
     # Lógica para obtener la lista de materiales
     materials_list = Material.objects.all()
+    
 
     id_material = request.GET.get('id_material')
     name = request.GET.get('name')
@@ -35,6 +36,8 @@ def materials_list(request):
     page_number = request.GET.get('page')
     pag_obj = paginator.get_page(page_number)
 
+    print(materials_list)
+
     return render(request, 'materials/material_list.html', {'pag_obj': pag_obj})
 
 def material_create(request):
@@ -51,8 +54,8 @@ def material_create(request):
             material = form.save(commit=False)
             material.created_by = request.user
             material.save()
-            return redirect('materials: material_create') # Redirige a la lista de materiales después de crear uno nuevo
-        else:
-            form = MaterialForm()
+            return redirect('materials:materials_create') # Redirige al formulario vacío después de guardar
+    else:
+        form = MaterialForm()
 
     return render(request, 'materials/material_form.html', {'form': form})

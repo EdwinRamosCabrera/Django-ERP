@@ -1,7 +1,9 @@
 from django.urls import path
-from app_materials import views
+from .views import materials_list, material_create
+
+app_name = 'materials'
 
 urlpatterns = [
-    path('', views.materials_list, name='material-list'),
-    path('create/', views.material_create, name='material-create'),
+    path('', materials_list, name='materials_list'),
+    path('create/', material_create, name='materials_create'),
 ]
