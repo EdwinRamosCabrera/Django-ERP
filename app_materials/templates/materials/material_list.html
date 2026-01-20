@@ -40,10 +40,13 @@
                     <!-- Export buttons, nos lleva funcion CSV en views.py y tambien toma todos los valores que tengamos en el filtro -->
                     <a href="?export=csv{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="bg-green-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300 text-center">Export CSV</a>
                 </div>
+                <div class="flex justify-end mb-4">
+                    <a href="{% url 'materials:material_bulk_create' %}" class="bg-indigo-600 text-white font-semibold px-4 py-2 rounded-md text-center shadow-md hover:bg-indigo-700 transition-colors duration-300">Bulk Upload (CSV)</a>
+                </div>
                 {% if permissions.materials >= 2 %}
                 <a href="{% url 'materials:materials_create' %}" class="bg-[#233b6e] text-white font-semibold px-6 py-2 rounded-lg text-center  transition-colors duration-300 hover:bg-[#1a2c53] ">Create New Material</a>
                 {% endif %}
-            </div>
+            </>
         </div>
     </form>
 </div>
