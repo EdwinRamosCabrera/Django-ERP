@@ -172,39 +172,40 @@ def supplier_bulk_create(request):
                     # Sino se puede decodificar mostramos un mensaje de error y retornamos al formulario
                     return render(request, 'suppliers/supplier_bulk_upload.html', {'form': form})
         
-        # Mediante la libreria io leemos y cargamos en memoria el archivo CSV
-        io_string = io.StringIO(data_set)
-        reader = csv.DictReader(io_string)
+            # Mediante la libreria io leemos y cargamos en memoria el archivo CSV
+            io_string = io.StringIO(data_set)
+            reader = csv.DictReader(io_string)
 
-        if reader.fieldnames:
-            if reader.fieldnames[0].startswith('\ufeff'): # Eliminamos el caracter \ufeff que es invisble y nos da problemas en la cabecera
-                reader.fieldnames[0] = reader.fieldnames[0].lstrip('\ufeff')
+            if reader.fieldnames:
+                if reader.fieldnames[0].startswith('\ufeff'): # Eliminamos el caracter \ufeff que es invisble y nos da problemas en la cabecera
+                    reader.fieldnames[0] = reader.fieldnames[0].lstrip('\ufeff')
 
-            # Limpiamos los nombres de las columnas de espacios en blanco y convertimos a minusculas    
-            cleaned_fieldnames = [key.strip().lower() for key in reader.fieldnames]
-            reader.fieldnames = cleaned_fieldnames
-        
-        # Inicializamos listas para registrar los resultados del procesamiento
-        successful_records = []
-        error_records = []
-        suppliers_to_create = []
+                # Limpiamos los nombres de las columnas de espacios en blanco y convertimos a minusculas    
+                cleaned_fieldnames = [key.strip().lower() for key in reader.fieldnames]
+                reader.fieldnames = cleaned_fieldnames
+            
+            # Inicializamos listas para registrar los resultados del procesamiento
+            successful_records = []
+            error_records = []
+            suppliers_to_create = []
 
-        
-        for i, row in enumerate(reader):  # Iniciamos el bucle principal que lee cada fila como un diccionario
-            row_number = i + 2 # Empezamos en 2 para contar la cabecera, asumimos que la fila 1 es el encabezado
-            form_data = []
+            
+            for i, row in enumerate(reader):  # Iniciamos el bucle principal que lee cada fila como un diccionario
+                row_number = i + 2 # Empezamos en 2 para contar la cabecera, asumimos que la fila 1 es el encabezado
+                form_data = {}
 
-            for key, value in row.items():
-                cleaned_value = value.strip() if isinstance(value, str) else value # Limpiamos los valores de espacios en blanco, usando strip()
-                form_data[key] = cleaned_value # Creamos un diccionario con los datos limpios
+                for key, value in row.items():
+                    cleaned_value = value.strip() if isinstance(value, str) else value # Limpiamos los valores de espacios en blanco, usando strip()
+                    form_data[key] = cleaned_value # Creamos un diccionario con los datos limpios
 
                 form = SupplierForm(form_data) # Validamos a traves del formulario de Django
-                
+                    
                 if form.is_valid():
-                   supplier = form.save(commit=False) # Creamos el objeto pero no lo guardamos aun
-                   supplier.created_by = request.user # Asignamos el usuario que crea el proveedor
-                   suppliers_to_create.append(supplier) # Agregamos el proveedor a la lista de proveedores a crear
-                   successful_records.append({'row':row_number, 'data': form_data}) # Agregamos al registro de creados exitosamente
+                    supplier = form.save(commit=False) # Creamos el objeto pero no lo guardamos aun
+                    supplier.created_by = request.user # Asignamos el usuario que crea el proveedor
+                    print(supplier)
+                    suppliers_to_create.append(supplier) # Agregamos el proveedor a la lista de proveedores a crear
+                    successful_records.append({'row':row_number, 'data': form_data}) # Agregamos al registro de creados exitosamente
                 else:
                     errors= {
                         field: ', '.join(err)
@@ -219,12 +220,6 @@ def supplier_bulk_create(request):
             if suppliers_to_create: # Si hay proveedores para crear, los guardamos en la base de datos
                 Supplier.objects.bulk_create(suppliers_to_create) # Usamos bulk_create para crear todos los proveedores de una vez en la base de datos
             messages.success(request, f'Process finished with {len(successful_records)} suppliers created successfully.')
-            
-            if error_records:
-                messages.error(request, f'Errors encountered in {len(error_records)} rows. Please check the error log.')
-                # Aquí podríamos guardar los errores en un archivo o base de datos para su revisión
-                return render(request, 'suppliers/supplier_bulk_upload.html', { 'form': form, 'error_records': error_records})
-            # Alternativamente, si no queremos usar bulk_create, podemos guardar uno por uno:   
 
             # Creamos el contexto para enviar a la plantilla los resultados del procesamiento
             context = {
@@ -236,9 +231,9 @@ def supplier_bulk_create(request):
                 'error_records': error_records,
                 'report_generated': True
             }
-            # Devolvemos el contexto en la misma plantilla de carga para mostrar los resultados
+                # Devolvemos el contexto en la misma plantilla de carga para mostrar los resultados
             return render(request, 'suppliers/supplier_bulk_upload.html', context)
-        # Si el formulario no es válido, retornamos al formulario con errores y sin ningun cambio realizado
+            # Si el formulario no es válido, retornamos al formulario con errores y sin ningun cambio realizado
         return render(request, 'suppliers/supplier_bulk_upload.html', {'form': form})
     
     else:

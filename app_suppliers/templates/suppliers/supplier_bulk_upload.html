@@ -103,7 +103,7 @@
         </div>
         {% endif %}
         <!-- Botones para volver a la lista de proveedores o subir otro archivo CSV -->
-        <div class="flex justify-end mt-8">
+        <div class="flex justify-end mt-8 gap-4">
             <a href="{% url 'suppliers:suppliers_list' %}" class="bg-[#233b6e] text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#1a2c53] transition-colors duration-300">Back to Supplier List</a>
             <a href="{% url 'suppliers:supplier_bulk_create' %}" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300">Upload Another CSV</a>
         </div>
