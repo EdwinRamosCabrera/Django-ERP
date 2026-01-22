@@ -4,7 +4,7 @@ from app_materials.models import Material
 class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
-        fields = ['id_material','name', 'description', 'unit', 'material_type','status']
+        fields = ['id_material','name', 'description', 'unit', 'material_type', 'status'] # Campos que se van a mostrar en el formulario
 
 class CsvUploadForm(forms.Form):
     csv_file = forms.FileField( # FileField es un formulario para subir archivos

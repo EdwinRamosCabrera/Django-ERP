@@ -4,8 +4,9 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 import csv
 from django.db import models
+from app_core.models import Status
 from app_users.models import UserRole
-from app_materials.models import Material
+from app_materials.models import Material, UnitMeasure, MaterialType
 from .forms import MaterialForm, CsvUploadForm
 from django.contrib import messages
 import io
@@ -31,10 +32,19 @@ def materials_list(request):
         materials_list = materials_list.filter(id_material__icontains=id_material)
     if name:
         materials_list = materials_list.filter(name__icontains=name)
+    # Filtrado por tipo de material, donde en el desplegable se muestra el nombre pero se filtra por el objeto completo
     if material_type:
-        materials_list = materials_list.filter(material_type__icontains=material_type)
-    if status is not None and status != '':
-        materials_list = materials_list.filter(status=status)
+        try:
+            material_type_obj = MaterialType.objects.get(name__iexact=material_type)
+            materials_list = materials_list.filter(material_type=material_type_obj)
+        except MaterialType.DoesNotExist:
+            materials_list = materials_list.none()
+    if status:
+        try:
+            status_obj = Status.objects.get(name__iexact=status)
+            materials_list = materials_list.filter(status=status_obj)
+        except Status.DoesNotExist:
+            materials_list = materials_list.none()
 
     # Exportar a CSV si se solicita
     if request.GET.get('export') == 'csv':
@@ -62,7 +72,24 @@ def materials_list(request):
     page_number = request.GET.get('page')
     pag_obj = paginator.get_page(page_number)
 
-    return render(request, 'materials/material_list.html', {'pag_obj': pag_obj})
+    # Pre-cargamos los estados y tipos de materiales para los filtros
+    try:
+        all_status = Status.objects.all().order_by('name')
+    except Status.DoesNotExist:
+        all_status = []
+
+    try:
+        all_material_types = MaterialType.objects.all().order_by('name')
+    except MaterialType.DoesNotExist:
+        all_material_types = []
+
+    context = {
+        'pag_obj': pag_obj,
+        'all_status': all_status,
+        'all_material_types': all_material_types,
+    }
+
+    return render(request, 'materials/material_list.html', context)
 
 def material_create(request):
     max_permission = UserRole.objects.filter(user_id=request.user).aggregate(max_permission=models.Max('role__materials'))['max_permission'] or 0
@@ -141,6 +168,29 @@ def material_bulk_create(request):
             csv_file = request.FILES['csv_file']
             csv_file = form.cleaned_data['csv_file']
 
+            # La carga masiva solo aceptara valores que existan en las tablas auxiliares
+            status_map = {
+                status.name.strip().lower(): status
+                for status in Status.objects.all()
+            }
+            # En Unit aceptara tanto el nombre como el simbolo
+            unit_map = {
+                unit.symbol.strip().lower(): unit 
+                for unit in UnitMeasure.objects.all()
+            }
+            unit_map.update({ unit.name.strip().lower(): unit 
+                for unit in UnitMeasure.objects.all()
+            })
+            # En Material Type aceptara tanto el nombre como el simbolo
+            material_type_map = {
+                material_type.symbol.strip().lower(): material_type
+                for material_type in MaterialType.objects.all()
+            }
+            material_type_map.update({ 
+                material_type.name.strip().lower(): material_type
+                for material_type in MaterialType.objects.all() 
+            })
+
             try:
                 data_set = csv_file.read().decode('utf-8') # Decodificamos el archivo CSV a UTF-8
             except UnicodeDecodeError:
@@ -177,6 +227,46 @@ def material_bulk_create(request):
                 for key, value in row.items():
                     cleaned_value = value.strip() if isinstance(value, str) else value # Limpiamos los valores de espacios en blanco, usando strip()
                     form_data[key] = cleaned_value # Creamos un diccionario con los datos limpios
+
+                # Procesamos los campos foraneos para obtener los objetos correspondientes
+                unit_value = form_data.get('unit', '').strip().lower()
+                unit_obj = unit_map.get(unit_value)
+
+                if unit_obj:
+                    form_data['unit'] = unit_obj.id
+                else:
+                    error_records.append({ # Agregamos al registro de errores
+                        'row': row_number,
+                        'data': row,
+                        'errors': {'unit': f'Unit Measure "{unit_value}" not found or invalid.'}
+                    })
+                    continue  # Saltamos al siguiente registro si la unidad no es válida
+
+                material_type_value = form_data.get('material_type', '').strip().lower()
+                material_type_obj = material_type_map.get(material_type_value)
+
+                if material_type_obj:
+                    form_data['material_type'] = material_type_obj.id
+                else:
+                    error_records.append({ # Agregamos al registro de errores
+                        'row': row_number,
+                        'data': row,
+                        'errors': {'material_type': f'Material Type "{material_type_value}" not found or invalid.'}
+                    })
+                    continue  # Saltamos al siguiente registro si el tipo de material no es válido
+
+                status_value = form_data.get('status', '').strip().lower()
+                status_obj = status_map.get(status_value)
+
+                if status_obj:
+                    form_data['status'] = status_obj.id
+                else:
+                    error_records.append({ # Agregamos al registro de errores
+                        'row': row_number,
+                        'data': row,
+                        'errors': {'status': f'Status "{status_value}" not found or invalid.'}
+                    })
+                    continue  # Saltamos al siguiente registro si el estado no es válido
 
                 form = MaterialForm(form_data) # Validamos a traves del formulario de Django
                     
